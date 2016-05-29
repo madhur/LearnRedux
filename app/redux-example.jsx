@@ -11,7 +11,7 @@ var stateDefault = {
 var nextHobbyId = 1;
 var nextMovieId = 1;
 
-var reducer = (state = stateDefault, action) => {
+var oldReducer = (state = stateDefault, action) => {
 	//state = state || {name: 'Anonymous'}
 
 	switch(action.type) {
@@ -77,14 +77,85 @@ var reducer = (state = stateDefault, action) => {
 	return state;
 };
 
+
+
 var nameReducer = (state='Anonymous', action) => {
 
+	switch(action.type)
+	{
+		case 'CHANGE_NAME':
+			return action.name;
+
+		default:
+			return state;
+	};
+
+};
+
+var hobbiesReducer = (state=[], action) => {
+
+	switch(action.type)
+	{
+		case 'ADD_HOBBY':
+		return [
+		 			...state,
+		 			{
+		 				id: nextHobbyId++,
+		 				hobby: action.hobby
+		 			}
+		 		];
+
+		case 'REMOVE_HOBBY':
+		return state.filter(function(hobby){
+		 			if(hobby.id == action.id)
+		 				return false;
+
+		 			return true;
+		 		});
+
+	}
+
+	return state;
+
+};
+
+var moviesReducer = (state=[], action) => {
+
+	switch(action.type)
+	{
+		case 'ADD_MOVIE':
+		return [
+		 			...state,
+		 			{
+		 				id: nextMovieId++,
+		 				movie: action.movie.name,
+		 				genre: action.movie.genre
+		 			}
+		 		];
+
+		case 'REMOVE_MOVIE':
+		return state.filter(function(movie){
+		 			if(movie.id == action.id)
+		 				return false;
+
+		 			return true;
+		 		});
+
+	}
+
+	return state;
 
 };
 
 var reducer = redux.combineReducers({
-	name: nameReducer
+	name: nameReducer,
+	hobbies: hobbiesReducer,
+	movies: moviesReducer
 });
+
+// var reducer = redux.combineReducers({
+// 	name: nameReducer
+// });
 
 var store = redux.createStore(reducer, redux.compose(
 
