@@ -9,10 +9,10 @@ require('style!css!bootstrap/dist/css/bootstrap.min.css')
 // App css
 require('style!css!sass!applicationStyles')
 
-ReactDOM.render(<div>Redux project</div>
-	, 
-	document.getElementById('main'));
+// ReactDOM.render(<div>Redux project</div>
+// 	, 
+// 	document.getElementById('main'));
 
 
-//require('./redux-example.jsx');
-require('./redux-todo-example.jsx');
+require('./redux-example.jsx');
+//require('./redux-todo-example.jsx');

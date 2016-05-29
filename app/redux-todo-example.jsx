@@ -25,7 +25,20 @@ var reducer = (state = stateDefault, action) => {
 	return state;
 };
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+
+	window.devToolsExtension? window.devToolsExtension(): (f)=>{
+		return f;
+	}
+	));
+
+var unsubscribe = store.subscribe(() => {
+	var state = store.getState();
+
+	document.getElementById('main').innerHTML = state.searchText;
+
+});
+//unsubscribe();
 
 var currentState = store.getState();
 
@@ -36,4 +49,14 @@ store.dispatch( {
 	newtext: 'Madhur'
 });
 
-console.log('New state with search text', store.getState());
+
+store.dispatch( {
+	type: 'CHANGE_SEARCH_TEXT',
+	newtext: 'Dog'
+});
+
+
+store.dispatch( {
+	type: 'CHANGE_SEARCH_TEXT',
+	newtext: 'something else'
+});

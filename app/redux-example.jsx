@@ -2,7 +2,16 @@ var redux = require('redux');
 
 console.log('starting redux example');
 
-var reducer = (state = {name: 'Anonymous'}, action) => {
+var stateDefault = {
+	name: 'Anonymous',
+	hobbies: [],
+	movies: []
+};
+
+var nextHobbyId = 1;
+var nextMovieId = 1;
+
+var reducer = (state = stateDefault, action) => {
 	//state = state || {name: 'Anonymous'}
 
 	switch(action.type) {
@@ -13,6 +22,54 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
 				name: action.name
 			};
 
+		case 'ADD_HOBBY':
+		 	return {
+		 		...state,
+		 		hobbies: [
+		 			...state.hobbies,
+		 			{
+		 				id: nextHobbyId++,
+		 				hobby: action.hobby
+		 			}
+		 		]
+		 	};
+
+		 case 'ADD_MOVIE':
+		 return {
+		 		...state,
+		 		movies: [
+		 			...state.movies,
+		 			{
+		 				id: nextMovieId++,
+		 				name: action.movie.name,
+		 				genre: action.movie.genre
+
+		 			}
+		 		]
+		 	};
+
+		 case 'REMOVE_HOBBY':
+		 	return{
+		 		...state,
+		 		hobbies: state.hobbies.filter(function(hobby){
+		 			if(hobby.id == action.id)
+		 				return false;
+
+		 			return true;
+		 		})
+		 	};
+
+		 case 'REMOVE_MOVIE':
+		 	return{
+		 		...state,
+		 		movies: state.movies.filter(function(movie){
+		 			if(movie.id == action.id)
+		 				return false;
+
+		 			return true;
+		 		})
+		 	};
+
 		default:
 			return state;
 	}
@@ -20,7 +77,26 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
 	return state;
 };
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+
+	window.devToolsExtension? window.devToolsExtension(): (f)=>{
+		return f;
+	}
+	));
+
+// Subscribe to changes
+
+var unsubscribe = store.subscribe(() => {
+	var state = store.getState();
+
+	document.getElementById('main').innerHTML = state.name;
+
+	console.log('New State', store.getState());
+
+});
+//unsubscribe();
+
+
 
 var currentState = store.getState();
 
@@ -31,51 +107,55 @@ store.dispatch( {
 	name: 'Madhur'
 });
 
-console.log('Name should be Madhur', store.getState());
+
+store.dispatch({
+	type: 'ADD_HOBBY',
+	hobby: 'Running'
+});
+
+store.dispatch({
+	type: 'ADD_HOBBY',
+	hobby: 'Walking'
+});
+
+store.dispatch({
+	type: 'REMOVE_HOBBY',
+	id:1
+});
+
+store.dispatch({
+	type: 'CHANGE_NAME',
+	name: 'Emily'
+});
 
 
 
-// Pure function
-// function add(a,b)
-// {
-// 	return a + b;
-// }
+store.dispatch({
+	type: 'ADD_MOVIE',
+	movie: {
+		name: '3 idiots',
+		genre: 'Comedy'
+	}
+});
 
+store.dispatch({
+	type: 'ADD_MOVIE',
+	movie: {
+		name: 'Phobia',
+		genre: 'horror'
+	}
+});
 
-// var a = 3;
-// // Not pure function
-// function add(b)
-// {
-// 	return a + b;
-// }
+store.dispatch({
+	type: 'ADD_MOVIE',
+	movie: {
+		name: 'Sadey CM',
+		genre: 'Thriller'
+	}
+});
 
-// var result;
-// // Not a pure function
-// function add (a, b) 
-// {
-// 	result = a + b;
-// 	return result;
-// }
+store.dispatch({
+	type: 'REMOVE_MOVIE',
+	id: 3
+});
 
-// // Not a pure function
-// function add (a, b)
-// {
-// 	return a + b + new date().getSeconds();
-// }
-
-
-// function changeProp(obj)
-// {
-// 	return {
-// 		...obj,
-// 		name: 'Jen'
-// 	};	
-// 	// obj.name = 'Jen';
-// 	// return obj;
-// }
-
-// changeProp ({
-// 	name: 'Andrew'
-// });
-
-// console.log(res);
