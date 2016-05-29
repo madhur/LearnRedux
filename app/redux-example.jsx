@@ -2,82 +2,9 @@ var redux = require('redux');
 
 console.log('starting redux example');
 
-var stateDefault = {
-	name: 'Anonymous',
-	hobbies: [],
-	movies: []
-};
 
-var nextHobbyId = 1;
-var nextMovieId = 1;
-
-var oldReducer = (state = stateDefault, action) => {
-	//state = state || {name: 'Anonymous'}
-
-	switch(action.type) {
-
-		case 'CHANGE_NAME':
-			return {
-				...state,
-				name: action.name
-			};
-
-		case 'ADD_HOBBY':
-		 	return {
-		 		...state,
-		 		hobbies: [
-		 			...state.hobbies,
-		 			{
-		 				id: nextHobbyId++,
-		 				hobby: action.hobby
-		 			}
-		 		]
-		 	};
-
-		 case 'ADD_MOVIE':
-		 return {
-		 		...state,
-		 		movies: [
-		 			...state.movies,
-		 			{
-		 				id: nextMovieId++,
-		 				name: action.movie.name,
-		 				genre: action.movie.genre
-
-		 			}
-		 		]
-		 	};
-
-		 case 'REMOVE_HOBBY':
-		 	return{
-		 		...state,
-		 		hobbies: state.hobbies.filter(function(hobby){
-		 			if(hobby.id == action.id)
-		 				return false;
-
-		 			return true;
-		 		})
-		 	};
-
-		 case 'REMOVE_MOVIE':
-		 	return{
-		 		...state,
-		 		movies: state.movies.filter(function(movie){
-		 			if(movie.id == action.id)
-		 				return false;
-
-		 			return true;
-		 		})
-		 	};
-
-		default:
-			return state;
-	}
-
-	return state;
-};
-
-
+// Name reducer and action generator
+// ---------------------------------
 
 var nameReducer = (state='Anonymous', action) => {
 
@@ -92,6 +19,28 @@ var nameReducer = (state='Anonymous', action) => {
 
 };
 
+var changeName = (name) => {
+	return {
+		type: 'CHANGE_NAME',
+		name
+	};
+};
+
+var addHobby = (hobby) => {
+	return {
+		type: 'ADD_HOBBY',
+		hobby
+	};
+};
+
+var removeHobby = (id) => {
+	return {
+		type: 'REMOVE_HOBBY',
+		id
+	};
+};
+
+var nextHobbyId = 1;
 var hobbiesReducer = (state=[], action) => {
 
 	switch(action.type)
@@ -119,6 +68,21 @@ var hobbiesReducer = (state=[], action) => {
 
 };
 
+var removeMovie = (id) => {
+	return {
+		type: 'REMOVE_MOVIE',
+		id
+	};
+};
+
+var addMovie = (movie) => {
+	return {
+		type: 'ADD_MOVIE',
+		movie
+	}
+}
+
+var nextMovieId = 1;
 var moviesReducer = (state=[], action) => {
 
 	switch(action.type)
@@ -182,60 +146,80 @@ var currentState = store.getState();
 
 console.log('currentState', currentState);
 
-store.dispatch( {
-	type: 'CHANGE_NAME',
-	name: 'Madhur'
-});
+// store.dispatch( {
+// 	type: 'CHANGE_NAME',
+// 	name: 'Madhur'
+// });
 
+store.dispatch(changeName('Madhur'));
 
-store.dispatch({
-	type: 'ADD_HOBBY',
-	hobby: 'Running'
-});
+// store.dispatch({
+// 	type: 'ADD_HOBBY',
+// 	hobby: 'Running'
+// });
 
-store.dispatch({
-	type: 'ADD_HOBBY',
-	hobby: 'Walking'
-});
+store.dispatch(addHobby('Running'));
 
-store.dispatch({
-	type: 'REMOVE_HOBBY',
-	id:1
-});
+store.dispatch(addHobby('Walking'));
 
-store.dispatch({
-	type: 'CHANGE_NAME',
-	name: 'Emily'
-});
+// store.dispatch({
+// 	type: 'ADD_HOBBY',
+// 	hobby: 'Walking'
+// });
 
+// store.dispatch({
+// 	type: 'REMOVE_HOBBY',
+// 	id:1
+// });
 
+store.dispatch(removeHobby(1));
 
-store.dispatch({
-	type: 'ADD_MOVIE',
-	movie: {
-		name: '3 idiots',
-		genre: 'Comedy'
-	}
-});
+// store.dispatch({
+// 	type: 'CHANGE_NAME',
+// 	name: 'Emily'
+// });
 
-store.dispatch({
-	type: 'ADD_MOVIE',
-	movie: {
+store.dispatch(changeName('Emily'));
+
+// store.dispatch({
+// 	type: 'ADD_MOVIE',
+// 	movie: {
+// 		name: '3 idiots',
+// 		genre: 'Comedy'
+// 	}
+// });
+
+store.dispatch(addMovie({name: '3 idiots', genre: 'Comedy'}));
+store.dispatch(addMovie({
 		name: 'Phobia',
 		genre: 'horror'
-	}
-});
+	}));
 
-store.dispatch({
-	type: 'ADD_MOVIE',
-	movie: {
+store.dispatch(addMovie({
 		name: 'Sadey CM',
 		genre: 'Thriller'
-	}
-});
+	}));
 
-store.dispatch({
-	type: 'REMOVE_MOVIE',
-	id: 3
-});
+// store.dispatch({
+// 	type: 'ADD_MOVIE',
+// 	movie: {
+// 		name: 'Phobia',
+// 		genre: 'horror'
+// 	}
+// });
+
+// store.dispatch({
+// 	type: 'ADD_MOVIE',
+// 	movie: {
+// 		name: 'Sadey CM',
+// 		genre: 'Thriller'
+// 	}
+// });
+
+// store.dispatch({
+// 	type: 'REMOVE_MOVIE',
+// 	id: 3
+// });
+
+store.dispatch(removeMovie(3));
 

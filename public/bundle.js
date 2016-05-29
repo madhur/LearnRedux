@@ -116,7 +116,7 @@
 	// 	,
 	// 	document.getElementById('main'));
 
-	__webpack_require__(260);
+	__webpack_require__(246);
 	//require('./redux-todo-example.jsx');
 
 /***/ },
@@ -26131,7 +26131,227 @@
 
 
 /***/ },
-/* 246 */,
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var redux = __webpack_require__(247);
+
+	console.log('starting redux example');
+
+	// Name reducer and action generator
+	// ---------------------------------
+
+	var nameReducer = function nameReducer() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? 'Anonymous' : arguments[0];
+		var action = arguments[1];
+
+
+		switch (action.type) {
+			case 'CHANGE_NAME':
+				return action.name;
+
+			default:
+				return state;
+		};
+	};
+
+	var changeName = function changeName(name) {
+		return {
+			type: 'CHANGE_NAME',
+			name: name
+		};
+	};
+
+	var addHobby = function addHobby(hobby) {
+		return {
+			type: 'ADD_HOBBY',
+			hobby: hobby
+		};
+	};
+
+	var removeHobby = function removeHobby(id) {
+		return {
+			type: 'REMOVE_HOBBY',
+			id: id
+		};
+	};
+
+	var nextHobbyId = 1;
+	var hobbiesReducer = function hobbiesReducer() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+		var action = arguments[1];
+
+
+		switch (action.type) {
+			case 'ADD_HOBBY':
+				return [].concat(_toConsumableArray(state), [{
+					id: nextHobbyId++,
+					hobby: action.hobby
+				}]);
+
+			case 'REMOVE_HOBBY':
+				return state.filter(function (hobby) {
+					if (hobby.id == action.id) return false;
+
+					return true;
+				});
+
+		}
+
+		return state;
+	};
+
+	var removeMovie = function removeMovie(id) {
+		return {
+			type: 'REMOVE_MOVIE',
+			id: id
+		};
+	};
+
+	var addMovie = function addMovie(movie) {
+		return {
+			type: 'ADD_MOVIE',
+			movie: movie
+		};
+	};
+
+	var nextMovieId = 1;
+	var moviesReducer = function moviesReducer() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+		var action = arguments[1];
+
+
+		switch (action.type) {
+			case 'ADD_MOVIE':
+				return [].concat(_toConsumableArray(state), [{
+					id: nextMovieId++,
+					movie: action.movie.name,
+					genre: action.movie.genre
+				}]);
+
+			case 'REMOVE_MOVIE':
+				return state.filter(function (movie) {
+					if (movie.id == action.id) return false;
+
+					return true;
+				});
+
+		}
+
+		return state;
+	};
+
+	var reducer = redux.combineReducers({
+		name: nameReducer,
+		hobbies: hobbiesReducer,
+		movies: moviesReducer
+	});
+
+	// var reducer = redux.combineReducers({
+	// 	name: nameReducer
+	// });
+
+	var store = redux.createStore(reducer, redux.compose(window.devToolsExtension ? window.devToolsExtension() : function (f) {
+		return f;
+	}));
+
+	// Subscribe to changes
+
+	var unsubscribe = store.subscribe(function () {
+		var state = store.getState();
+
+		document.getElementById('main').innerHTML = state.name;
+
+		console.log('New State', store.getState());
+	});
+	//unsubscribe();
+
+	var currentState = store.getState();
+
+	console.log('currentState', currentState);
+
+	// store.dispatch( {
+	// 	type: 'CHANGE_NAME',
+	// 	name: 'Madhur'
+	// });
+
+	store.dispatch(changeName('Madhur'));
+
+	// store.dispatch({
+	// 	type: 'ADD_HOBBY',
+	// 	hobby: 'Running'
+	// });
+
+	store.dispatch(addHobby('Running'));
+
+	store.dispatch(addHobby('Walking'));
+
+	// store.dispatch({
+	// 	type: 'ADD_HOBBY',
+	// 	hobby: 'Walking'
+	// });
+
+	// store.dispatch({
+	// 	type: 'REMOVE_HOBBY',
+	// 	id:1
+	// });
+
+	store.dispatch(removeHobby(1));
+
+	// store.dispatch({
+	// 	type: 'CHANGE_NAME',
+	// 	name: 'Emily'
+	// });
+
+	store.dispatch(changeName('Emily'));
+
+	// store.dispatch({
+	// 	type: 'ADD_MOVIE',
+	// 	movie: {
+	// 		name: '3 idiots',
+	// 		genre: 'Comedy'
+	// 	}
+	// });
+
+	store.dispatch(addMovie({ name: '3 idiots', genre: 'Comedy' }));
+	store.dispatch(addMovie({
+		name: 'Phobia',
+		genre: 'horror'
+	}));
+
+	store.dispatch(addMovie({
+		name: 'Sadey CM',
+		genre: 'Thriller'
+	}));
+
+	// store.dispatch({
+	// 	type: 'ADD_MOVIE',
+	// 	movie: {
+	// 		name: 'Phobia',
+	// 		genre: 'horror'
+	// 	}
+	// });
+
+	// store.dispatch({
+	// 	type: 'ADD_MOVIE',
+	// 	movie: {
+	// 		name: 'Sadey CM',
+	// 		genre: 'Thriller'
+	// 	}
+	// });
+
+	// store.dispatch({
+	// 	type: 'REMOVE_MOVIE',
+	// 	id: 3
+	// });
+
+	store.dispatch(removeMovie(3));
+
+/***/ },
 /* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26970,231 +27190,6 @@
 	    if (typeof _ret === "object") return _ret.v;
 	  }
 	}
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var redux = __webpack_require__(247);
-
-	console.log('starting redux example');
-
-	var stateDefault = {
-		name: 'Anonymous',
-		hobbies: [],
-		movies: []
-	};
-
-	var nextHobbyId = 1;
-	var nextMovieId = 1;
-
-	var oldReducer = function oldReducer() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? stateDefault : arguments[0];
-		var action = arguments[1];
-
-		//state = state || {name: 'Anonymous'}
-
-		switch (action.type) {
-
-			case 'CHANGE_NAME':
-				return _extends({}, state, {
-					name: action.name
-				});
-
-			case 'ADD_HOBBY':
-				return _extends({}, state, {
-					hobbies: [].concat(_toConsumableArray(state.hobbies), [{
-						id: nextHobbyId++,
-						hobby: action.hobby
-					}])
-				});
-
-			case 'ADD_MOVIE':
-				return _extends({}, state, {
-					movies: [].concat(_toConsumableArray(state.movies), [{
-						id: nextMovieId++,
-						name: action.movie.name,
-						genre: action.movie.genre
-
-					}])
-				});
-
-			case 'REMOVE_HOBBY':
-				return _extends({}, state, {
-					hobbies: state.hobbies.filter(function (hobby) {
-						if (hobby.id == action.id) return false;
-
-						return true;
-					})
-				});
-
-			case 'REMOVE_MOVIE':
-				return _extends({}, state, {
-					movies: state.movies.filter(function (movie) {
-						if (movie.id == action.id) return false;
-
-						return true;
-					})
-				});
-
-			default:
-				return state;
-		}
-
-		return state;
-	};
-
-	var nameReducer = function nameReducer() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? 'Anonymous' : arguments[0];
-		var action = arguments[1];
-
-
-		switch (action.type) {
-			case 'CHANGE_NAME':
-				return action.name;
-
-			default:
-				return state;
-		};
-	};
-
-	var hobbiesReducer = function hobbiesReducer() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-		var action = arguments[1];
-
-
-		switch (action.type) {
-			case 'ADD_HOBBY':
-				return [].concat(_toConsumableArray(state), [{
-					id: nextHobbyId++,
-					hobby: action.hobby
-				}]);
-
-			case 'REMOVE_HOBBY':
-				return state.filter(function (hobby) {
-					if (hobby.id == action.id) return false;
-
-					return true;
-				});
-
-		}
-
-		return state;
-	};
-
-	var moviesReducer = function moviesReducer() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-		var action = arguments[1];
-
-
-		switch (action.type) {
-			case 'ADD_MOVIE':
-				return [].concat(_toConsumableArray(state), [{
-					id: nextMovieId++,
-					movie: action.movie.name,
-					genre: action.movie.genre
-				}]);
-
-			case 'REMOVE_MOVIE':
-				return state.filter(function (movie) {
-					if (movie.id == action.id) return false;
-
-					return true;
-				});
-
-		}
-
-		return state;
-	};
-
-	var reducer = redux.combineReducers({
-		name: nameReducer,
-		hobbies: hobbiesReducer,
-		movies: moviesReducer
-	});
-
-	// var reducer = redux.combineReducers({
-	// 	name: nameReducer
-	// });
-
-	var store = redux.createStore(reducer, redux.compose(window.devToolsExtension ? window.devToolsExtension() : function (f) {
-		return f;
-	}));
-
-	// Subscribe to changes
-
-	var unsubscribe = store.subscribe(function () {
-		var state = store.getState();
-
-		document.getElementById('main').innerHTML = state.name;
-
-		console.log('New State', store.getState());
-	});
-	//unsubscribe();
-
-	var currentState = store.getState();
-
-	console.log('currentState', currentState);
-
-	store.dispatch({
-		type: 'CHANGE_NAME',
-		name: 'Madhur'
-	});
-
-	store.dispatch({
-		type: 'ADD_HOBBY',
-		hobby: 'Running'
-	});
-
-	store.dispatch({
-		type: 'ADD_HOBBY',
-		hobby: 'Walking'
-	});
-
-	store.dispatch({
-		type: 'REMOVE_HOBBY',
-		id: 1
-	});
-
-	store.dispatch({
-		type: 'CHANGE_NAME',
-		name: 'Emily'
-	});
-
-	store.dispatch({
-		type: 'ADD_MOVIE',
-		movie: {
-			name: '3 idiots',
-			genre: 'Comedy'
-		}
-	});
-
-	store.dispatch({
-		type: 'ADD_MOVIE',
-		movie: {
-			name: 'Phobia',
-			genre: 'horror'
-		}
-	});
-
-	store.dispatch({
-		type: 'ADD_MOVIE',
-		movie: {
-			name: 'Sadey CM',
-			genre: 'Thriller'
-		}
-	});
-
-	store.dispatch({
-		type: 'REMOVE_MOVIE',
-		id: 3
-	});
 
 /***/ }
 /******/ ]);
