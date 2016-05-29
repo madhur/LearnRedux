@@ -26979,6 +26979,8 @@
 
 	'use strict';
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var redux = __webpack_require__(247);
 
 	console.log('starting redux example');
@@ -26995,6 +26997,15 @@
 
 		//state = state || {name: 'Anonymous'}
 
+		switch (action.type) {
+			case 'CHANGE_SEARCH_TEXT':
+				return _extends({}, state, {
+					searchText: action.newtext
+				});
+
+			default:
+				return state;
+		}
 		return state;
 	};
 
@@ -27003,6 +27014,13 @@
 	var currentState = store.getState();
 
 	console.log('currentState', currentState);
+
+	store.dispatch({
+		type: 'CHANGE_SEARCH_TEXT',
+		newtext: 'Madhur'
+	});
+
+	console.log('New state with search text', store.getState());
 
 /***/ }
 /******/ ]);
