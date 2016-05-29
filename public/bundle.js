@@ -27050,6 +27050,15 @@
 		return state;
 	};
 
+	var nameReducer = function nameReducer() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? 'Anonymous' : arguments[0];
+		var action = arguments[1];
+	};
+
+	var reducer = redux.combineReducers({
+		name: nameReducer
+	});
+
 	var store = redux.createStore(reducer, redux.compose(window.devToolsExtension ? window.devToolsExtension() : function (f) {
 		return f;
 	}));

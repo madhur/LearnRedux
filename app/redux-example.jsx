@@ -77,6 +77,15 @@ var reducer = (state = stateDefault, action) => {
 	return state;
 };
 
+var nameReducer = (state='Anonymous', action) => {
+
+
+};
+
+var reducer = redux.combineReducers({
+	name: nameReducer
+});
+
 var store = redux.createStore(reducer, redux.compose(
 
 	window.devToolsExtension? window.devToolsExtension(): (f)=>{
