@@ -1,66 +1,24 @@
 var axios = require('axios');
 
-export var changeName = (name) => {
-	return {
-		type: 'CHANGE_NAME',
-		name
-	};
-};
-
-export var addHobby = (hobby) => {
+export var addHobbyAction = function(name)
+{
 	return {
 		type: 'ADD_HOBBY',
-		hobby
-	};
-};
-
-export var removeHobby = (id) => {
-	return {
-		type: 'REMOVE_HOBBY',
-		id
-	};
-};
-
-export var removeMovie = (id) => {
-	return {
-		type: 'REMOVE_MOVIE',
-		id
-	};
-};
-
-export var addMovie = (movie) => {
-	return {
-		type: 'ADD_MOVIE',
-		movie
-	}
-}
-
-export var startLocationFetch = () => {
-	return {
-		type: 'START_LOCATION_FETCH'
-	};
-};
-
-export var completeLocationFetch = (url) => {
-	return {
-		type: 'COMPLETE_LOCATION_FETCH',
-		url
-	};
-};
-
-export var fetchLocation = () => {
-	return (dispatch, getState) => {
-
-		dispatch(startLocationFetch());
-
-		axios.get('http://ipinfo.io').then(function(res){
-		var loc = res.data.loc;
-		var baseUrl = 'http://maps.google.com?='
-
-		dispatch(completeLocationFetch(baseUrl + loc));
-
-	});
-
-
+		hobby: name
 	};
 }
+
+export var getWeatherAction = function()
+{
+
+	var weatherPromise = axios.get('http://api.openweathermap.org/data/2.5/weather?appid=fd8e51a8a23d22e2f1fb6733ff473fcd&units=metric&q=bangalor');
+
+	return {
+		type: 'GET_WEATHER',
+		payload: {
+			promise: weatherPromise
+		}
+	};
+
+}
+

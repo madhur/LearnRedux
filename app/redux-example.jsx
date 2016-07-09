@@ -1,5 +1,5 @@
 var redux = require('redux');
-
+var axios = require('axios');
 
 console.log('starting redux example');
 
@@ -25,7 +25,22 @@ var unsubscribe = store.subscribe(() => {
 
 });
 
-store.dispatch(actions.fetchLocation());
+//store.dispatch(actions.fetchLocation(store));
+
+var fetchLocation = () => {
+
+		store.dispatch(actions.startLocationFetch());
+
+		axios.get('http://ipinfo.io').then(function(res){
+		var loc = res.data.loc;
+		var baseUrl = 'http://maps.google.com?='
+
+		store.dispatch(actions.completeLocationFetch(baseUrl + loc));
+
+	});
+};
+
+fetchLocation();
 
 var currentState = store.getState();
 
